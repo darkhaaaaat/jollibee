@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="/static/logo.png">
+  <title>Jollibee Early Pamasko</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #d1d3d7, #ffffff);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      width: 100%;
+      background-color: rgb(243, 4, 4);
+      color: #ffffff;
+      padding: 15px 0;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-left: 20px;
+    }
+
+    .header img {
+      width: 80px;
+      border-radius: 30px;
+    }
+
+    .header p {
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      font-size: x-large;
+      margin: 0;
+      font-weight: bold;
+    }
+
+    .main-container {
+      display: flex;
+      flex: 1;
+      margin-top: 70px;
+      min-height: 0;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      background-color: #ffffff;
+      padding: 20px;
+      color: rgb(0, 0, 0);
+      text-align: left;
+      border-right: 2px solid #ff0000;
+      flex-shrink: 0;
+    }
+
+    .sidebar h2 {
+      margin-bottom: 15px;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding-left: 0;
+    }
+
+    .sidebar li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .sidebar li img {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 5px;
+      object-fit: cover;
+      border: 2px solid #fc0000;
+    }
+
+    .sidebar button{
+      background-color: rgb(255, 0, 0);
+      color: rgb(255, 252, 252);
+      margin-left: 20px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin-top: 10px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+
+    .sidebar button:hover {
+      background-color: rgb(137, 10, 10);
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow: auto;
+      padding: 30px 0;
+      min-width: 0;
+      margin-top: 20px;
+    }
+
+    #wheel-top-text {
+      text-align: center;
+      margin-bottom: 20px;
+      color: white;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+    }
+
+    #winner-text {
+      font-size: 18px;
+    }
+
+    #winner-number {
+      font-size: 28px;
+      font-weight: bold;
+      color: gold;
+    }
+
+    .wheel-container {
+      position: relative;
+      width: 350px;
+      height: 350px;
+      margin-top: 20px;
+    }
+
+    #wheel {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 8px solid #fff;
+      transition: transform 5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+
+    .arrow {
+      position: absolute;
+      top: -25px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid red;
+    }
+
+    button {
+      margin-top: 20px;
+      background-color: #ff0000;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #ff1a1a;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    #overlay h2 {
+      font-size: 28px;
+      margin-bottom: 15px;
+      color: #fff;
+    }
+
+    #overlay img {
+      width: 150px;
+      height: 150px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border: 3px solid #fff;
+      box-shadow: 0 0 20px gold;
+    }
+
+    #claim {
+      background-color: #28a745;
+      font-size: 18px;
+      padding: 10px 25px;
+    }
+
+    #claim:hover {
+      background-color: #1e7e34;
+    }
+
+    footer {
+      background-color: rgb(255, 255, 255);
+      color: rgb(0, 0, 0);
+      text-align: center;
+      padding: 15px 0;
+      font-size: 14px;
+      box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+      margin-top: auto;
+    }
+
+    /* Mobile only detail */
+    .mobile-detail {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        flex-direction: column;
+      }
+
+      .content {
+        order: 1;
+        width: 100%;
+        margin-top: 50px;
+        padding: 10px 0;
+      }
+
+      .sidebar {
+        order: 2;
+        width: 100%;
+        border-right: none;
+        border-bottom: 2px solid #ff0000;
+        padding: 10px;
+      }
+
+      .sidebar h2 {
+        font-size: 16px;
+      }
+
+      .sidebar ul li {
+        font-size: 14px;
+      }
+
+      .sidebar li img {
+        width: 30px;
+        height: 30px;
+      }
+
+      .sidebar button {
+        font-size: 14px;
+        padding: 5px 10px;
+      }
+
+      .mobile-detail {
+        display: block;
+      }
+
+      .desktop-sidebar-content {
+        display: none;
+      }
+
+      .wheel-container {
+        max-width: 90%;
+        margin: 10px auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="page-header">
+    <div class="header">
+      <img src="/static/logo.png" alt="logo">
+      <p>Jollibee Early Pamasko</p>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <!-- Content first -->
+    <div class="content">
+      <div id="wheel-top-text">
+        <div style="color: black;" id="winner-text">Over <span id="winner-number">0</span> winners!</div>
+        <div style="color: black;">Try your luck now!</div>
+      </div>
+
+      <div class="wheel-container">
+        <div class="arrow"></div>
+        <canvas id="wheel" width="350" height="350"></canvas>
+      </div>
+
+      <button id="spin">Spin</button>
+      <audio id="audio" src="/static/spin.mp3"></audio>
+      <audio id="audio1" src="/static/music.mp3"></audio>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Mobile Detail -->
+   <details class="mobile-detail">
+  <summary>Menu & Offers</summary>
+  <h2>50% sale!!!</h2>
+  <ul>
+    <li><img src="/static/1.jpg" alt="Chickenjoy">Chickenjoy</li>
+    <li><img src="/static/3.jpg" alt="Spaghetti">Jolly Spaghetti</li>
+    <li><img src="/static/2.jpg" alt="Burger Steak">Burger Steak</li>
+    <li><img src="/static/4.jpg" alt="Yumburger">Yumburger</li>
+    <li><img src="/static/5.jpg" alt="Palabok">Palabok Fiesta</li>
+  </ul>
+  <a href="https://www.jollibee.com.ph/menu"><button>Order now</button></a>
+  <h3>Over <strong style="color: gold;">40035</strong> winners</h3>
+  <button onclick="playauido()"><p id="musicplay">play music</p></button>
+</details>
+
+      <!-- Desktop content -->
+      <div class="desktop-sidebar-content">
+        <h2>50% sale!!!</h2>
+        <ul>
+          <li><img src="/static/1.jpg" alt="Chickenjoy">Chickenjoy</li>
+          <li><img src="/static/3.jpg" alt="Spaghetti">Jolly Spaghetti</li>
+          <li><img src="/static/2.jpg" alt="Burger Steak">Burger Steak</li>
+          <li><img src="/static/4.jpg" alt="Yumburger">Yumburger</li>
+          <li><img src="/static/5.jpg" alt="Palabok">Palabok Fiesta</li>
+        </ul>
+        <a href="https://www.jollibee.com.ph/menu"><button>Order now</button></a>
+        <h3>Over <strong style="color: gold;">40035</strong> winners</h3>
+        <button onclick="playauido()"><p id="musicplay">play music</p></button>
+      </div>
+    </aside>
+  </div>
+
+  <div id="overlay">
+    <h2 id="message"></h2>
+    <img id="item-image" src="" alt="">
+    <button id="claim">Claim</button>
+  </div>
+
+  <footer>
+    &copy; 2025 Jollibee. All rights reserved.
+  </footer>
+
+  <audio id="bg-music" src="/static/music.mp3" autoplay loop></audio>
+
+  <script>
+    const winnerNumberEl = document.getElementById("winner-number");
+    let currentNumber = 0;
+    const targetNumber = 40035;
+    let audio1 = document.getElementById('audio1')
+    const changetext = document.getElementById('musicplay');
+
+    function playauido() {
+      if(changetext.textContent==="play music") {
+        audio1.play();
+        changetext.textContent = "pause music"
+      } else if(changetext.textContent==="pause music") {
+        audio1.pause ();
+        changetext.textContent = "play music"
+      }
+    }
+
+    function incrementNumber() {
+      if (currentNumber < targetNumber) {
+        currentNumber += 50;
+        if (currentNumber > targetNumber) currentNumber = targetNumber;
+        winnerNumberEl.textContent = currentNumber.toLocaleString();
+        setTimeout(incrementNumber, 50);
+      }
+    }
+    incrementNumber();
+
+    const wheel = document.getElementById("wheel");
+    const spinBtn = document.getElementById("spin");
+    const overlay = document.getElementById("overlay");
+    const message = document.getElementById("message");
+    const itemImage = document.getElementById("item-image");
+    const claimBtn = document.getElementById("claim");
+    const audio = document.getElementById("audio");
+    const ctx = wheel.getContext("2d");
+
+    const items = [
+      { name: "Iphone 17", img: "/static/iphone.png" },
+      { name: "Iphone 17", img: "/static/iphone.png" },
+      { name: "10k pesos worth cash", img: "/static/cash.png" },
+      { name: "Honda click150", img: "/static/hondaclick.png" },
+      { name: "Travel bike", img: "/static/bike.png" },
+      { name: "Travel bike", img: "/static/bike.png" },
+      { name: "500 pesos worth of cash", img: "/static/500.png" },
+      { name: "500 pesos worth of cash", img: "/static/500.png" },
+    ];
+
+    const totalSegments = items.length;
+    const segmentAngle = 360 / totalSegments;
+
+    function drawWheel() {
+      items.forEach((item, i) => {
+        const startAngle = (i * 2 * Math.PI) / totalSegments;
+        const endAngle = startAngle + (2 * Math.PI) / totalSegments;
+
+        ctx.beginPath();
+        ctx.moveTo(175, 175);
+        ctx.arc(175, 175, 175, startAngle, endAngle);
+        ctx.fillStyle = i % 2 === 0 ? "#f39c12" : "#f1c40f";
+        ctx.fill();
+
+        const midAngle = startAngle + (Math.PI / totalSegments);
+        const img = new Image();
+        img.src = item.img;
+        img.onload = () => {
+          const x = 175 + Math.cos(midAngle) * 100 - 25;
+          const y = 175 + Math.sin(midAngle) * 100 - 25;
+          ctx.drawImage(img, x, y, 50, 50);
+        };
+      });
+    }
+    drawWheel();
+
+    let spinning = false;
+    let rotation = 0;
+
+    spinBtn.addEventListener("click", () => {
+      if (spinning) return;
+      spinning = true;
+      overlay.style.display = "none";
+
+      audio.currentTime = 0;
+      audio.play().catch(err => console.log(err));
+
+      const spinAmount = 2000 + Math.random() * 2000;
+      rotation += spinAmount;
+      wheel.style.transform = `rotate(${rotation}deg)`;
+
+      setTimeout(() => {
+        const degrees = rotation % 360;
+        const adjustedDegrees = (degrees + 90) % 360;
+        const index = totalSegments - Math.floor(adjustedDegrees / segmentAngle) - 1;
+        const correctedIndex = (index + totalSegments) % totalSegments;
+        const winItem = items[correctedIndex];
+
+        message.textContent = `You Win: ${winItem.name}! 🎉`;
+        itemImage.src = winItem.img;
+        overlay.style.display = "flex";
+        spinning = false;
+
+        audio.pause();
+      }, 5000);
+    });
+
+    claimBtn.addEventListener("click", () => {
+      window.location.href = "/login";
+      overlay.style.display = "none";
+    });
+  </script>
+</body>
+</html>
